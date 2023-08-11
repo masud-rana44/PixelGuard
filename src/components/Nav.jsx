@@ -1,24 +1,24 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const session = {
   user: null,
 };
 
-const providers = {
-  Google: "Google",
-};
-
 function Nav() {
+  const navigate = useNavigate(false);
+  const location = useLocation();
   const [toggleDropdown, setToggleDropdown] = useState(false);
-
-  function signIn() {}
 
   function signOut() {}
 
+  function handleClick() {
+    navigate(location.pathname === "/signin" ? "/signup" : "/signin");
+  }
+
   return (
     <nav className="flex-between w-full mb-16 pt-3">
-      <Link href="/" className="flex-center gap-2 " onClick={() => {}}>
+      <Link to="/" className="flex-center gap-2 " onClick={() => {}}>
         <img
           src="./logo.svg"
           alt="Promptopia Logo"
@@ -41,7 +41,7 @@ function Nav() {
               Sign Out
             </button>
 
-            <Link href="/profile">
+            <Link to="/profile">
               <img
                 src="./logo.svg"
                 alt="profile"
@@ -52,19 +52,9 @@ function Nav() {
             </Link>
           </div>
         ) : (
-          <>
-            {providers &&
-              Object.values(providers).map((provider) => (
-                <button
-                  type="button"
-                  key={provider.name}
-                  onClick={() => {}}
-                  className="black_btn"
-                >
-                  Sign In
-                </button>
-              ))}
-          </>
+          <button type="button" onClick={handleClick} className="black_btn">
+            {location.pathname === "/signin" ? "Sign Up" : "Sign In"}
+          </button>
         )}
       </div>
       {/* Mobile Navigation */}
@@ -110,19 +100,9 @@ function Nav() {
             )}
           </div>
         ) : (
-          <>
-            {providers &&
-              Object.values(providers).map((provider) => (
-                <button
-                  type="button"
-                  key={provider.name}
-                  onClick={() => signIn(provider.id)}
-                  className="outline_btn"
-                >
-                  Sign In
-                </button>
-              ))}
-          </>
+          <button type="button" onClick={handleClick} className="outline_btn">
+            {location.pathname === "/signin" ? "Sign Up" : "Sign In"}
+          </button>
         )}
       </div>
     </nav>
