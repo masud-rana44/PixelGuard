@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "./Button";
 import Checkbox from "./Checkbox";
 import Input from "./Input";
@@ -8,6 +8,7 @@ import { toast } from "react-hot-toast";
 
 function Form() {
   const { login } = useAuth();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -21,6 +22,7 @@ function Form() {
 
       await login(email, password);
       toast.success("Successfully login");
+      navigate("/");
     } catch (err) {
       toast.error(err.message || "Failed to login! Try again later.");
     } finally {

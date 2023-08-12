@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "./Button";
 import Input from "./Input";
 import { useState } from "react";
@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 
 function Form() {
   const { signup } = useAuth();
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,6 +22,7 @@ function Form() {
 
       await signup(email, password, username);
       toast.success("Successfully create new account");
+      navigate("/");
     } catch (err) {
       toast.error(err.message || "Failed to create an account");
     } finally {

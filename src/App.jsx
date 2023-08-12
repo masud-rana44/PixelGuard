@@ -8,6 +8,8 @@ import RootLayout from "./components/RootLayout";
 import PageNotFound from "./components/PageNotFound";
 import AppLayout from "./components/AppLayout";
 import { AuthProvider } from "./contexts/AuthContext";
+import PrivateOutlet from "./components/PrivateOutlet";
+import PublicOutlet from "./components/PublicOutlet";
 
 function App() {
   return (
@@ -16,9 +18,18 @@ function App() {
         <Routes>
           <Route element={<RootLayout />}>
             <Route index element={<Home />} />
-            <Route path="/signin" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/app" element={<AppLayout />} />
+            <Route element={<PublicOutlet />}>
+              <Route path="/signin" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+            </Route>
+            <Route
+              path="/app"
+              element={
+                <PrivateOutlet>
+                  <AppLayout />
+                </PrivateOutlet>
+              }
+            />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         </Routes>
