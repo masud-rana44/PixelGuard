@@ -1,16 +1,22 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-
-const session = {
-  user: null,
-};
+import { useAuth } from "../contexts/AuthContext";
+import { toast } from "react-hot-toast";
 
 function Nav() {
+  const { user, logout } = useAuth();
   const navigate = useNavigate(false);
   const location = useLocation();
   const [toggleDropdown, setToggleDropdown] = useState(false);
 
-  function signOut() {}
+  async function signOut() {
+    try {
+      await logout();
+      toast.success("Successfully logged out");
+    } catch (err) {
+      toast.error(err.message || "Logout failed");
+    }
+  }
 
   function handleClick() {
     navigate(location.pathname === "/signin" ? "/signup" : "/signin");
@@ -31,24 +37,20 @@ function Nav() {
 
       {/* Desktop Navigation */}
       <div className="sm:flex hidden">
-        {session?.user ? (
+        {user ? (
           <div className="flex gap-3 md:gap-5">
             <Link href="/create-prompt" className="black_btn">
               Create Prompt
             </Link>
 
-            <button type="button" onClick={() => {}} className="outline_btn">
+            <button type="button" onClick={signOut} className="outline_btn">
               Sign Out
             </button>
 
             <Link to="/profile">
-              <img
-                src="./logo.svg"
-                alt="profile"
-                width={37}
-                height={37}
-                className="rounded-full"
-              />
+              <span className="w-9 h-9 rounded-full bg-slate-400 flex items-center justify-center text-white font-medium">
+                {user?.displayName[0].toUpperCase()}
+              </span>
             </Link>
           </div>
         ) : (
@@ -59,7 +61,7 @@ function Nav() {
       </div>
       {/* Mobile Navigation */}
       <div className="sm:hidden flex relative">
-        {session?.user ? (
+        {user ? (
           <div className="flex">
             <img
               src="./menu.svg"
@@ -90,7 +92,7 @@ function Nav() {
                   type="button"
                   onClick={() => {
                     setToggleDropdown(false);
-                    signOut({ callbackUrl: "http://localhost:3000/" });
+                    signOut();
                   }}
                   className="mt-5 w-full black_btn"
                 >
